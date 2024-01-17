@@ -18,6 +18,8 @@ func Tracer(inner http.Handler) http.Handler {
 		ctx, span := tr.Start(ctx, fmt.Sprintf("%s %s", strings.ToUpper(r.Method), r.URL.Path))
 		defer span.End()
 
-		inner.ServeHTTP(w, r.WithContext(ctx))
+		ctx = r.WithContext(ctx)
+
+		inner.ServeHTTP(w, ctx)
 	})
 }
